@@ -1,6 +1,6 @@
-using System.Text;
-
 namespace Luna.PKG;
+
+using System.Text;
 
 public class PackageWriter
 {
@@ -10,10 +10,10 @@ public class PackageWriter
     {
 
         PackageWriter pkg = new();
-        string[] files = Directory.GetFiles(assetPath, "*.*", SearchOption.AllDirectories);
-        foreach (string file in files)
+        var files = Directory.GetFiles(assetPath, "*.*", SearchOption.AllDirectories);
+        foreach (var file in files)
         {
-            string path = file.Replace("\\", "/").Replace("//", "/");
+            var path = file.Replace("\\", "/").Replace("//", "/");
             Console.WriteLine($"Adding {path}");
             pkg.AddAsset(path);
         }
@@ -27,16 +27,16 @@ public class PackageWriter
         writer.Write((long)0); //index to file table
         writer.Write((long)0); //size of file table
 
-        foreach (PackedAsset asset in Assets)
+        foreach (var asset in this.Assets)
         {
-            byte[] data = LoadData(asset);
+            var data = LoadData(asset);
             asset.Size = data.Length;
             asset.Start = writer.BaseStream.Position;
             writer.Write(data);
         }
 
-        int index = (int)writer.BaseStream.Position;
-        foreach (PackedAsset asset in Assets)
+        var index = (int)writer.BaseStream.Position;
+        foreach (var asset in this.Assets)
         {
             writer.Write(asset.Path);
             writer.Write(asset.Start);
@@ -45,17 +45,17 @@ public class PackageWriter
 
         _ = writer.BaseStream.Seek(3, SeekOrigin.Begin);
         writer.Write((long)index);
-        writer.Write((long)Assets.Count);
+        writer.Write((long)this.Assets.Count);
     }
 
     public void AddAsset(string path)
     {
-        if (Assets.Any(a => a.Path == path))
+        if (this.Assets.Any(a => a.Path == path))
         {
             return;
         }
 
-        Assets.Add(new PackedAsset(path, 0, 0));
+        this.Assets.Add(new PackedAsset(path, 0, 0));
     }
 
     public static byte[] LoadData(PackedAsset asset)

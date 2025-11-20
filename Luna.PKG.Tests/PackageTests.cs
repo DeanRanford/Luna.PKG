@@ -1,4 +1,4 @@
-﻿namespace Luna.PKG.Tests;
+namespace Luna.PKG.Tests;
 
 [TestClass]
 public sealed class PackageTests
@@ -10,8 +10,8 @@ public sealed class PackageTests
         Assert.IsTrue(File.Exists("assets.pkg"));
         PackageReader pkg = new("assets.pkg");
         Assert.IsTrue(pkg.Assets.Count > 0);
-        byte[] txtFile = pkg.GetAsset("Assets/test.txt");
-        byte[] spriteFile = pkg.GetAsset("Assets/SprItes/sprite.png");
+        var txtFile = pkg.GetAsset("Assets/test.txt");
+        var spriteFile = pkg.GetAsset("Assets/SprItes/sprite.png");
         Assert.IsTrue(spriteFile.Length == 796);
         _ = Assert.ThrowsException<Exception>(() => pkg.GetAsset("Assets/doesnotexist.txt"));
         _ = Assert.ThrowsException<FileNotFoundException>(() => new PackageReader("doesnotexist.pkg"));
