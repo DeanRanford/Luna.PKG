@@ -13,7 +13,7 @@ public sealed class PackageTests
         var txtFile = pkg.GetAsset("Assets/test.txt");
         var spriteFile = pkg.GetAsset("Assets/SprItes/sprite.png");
         Assert.IsTrue(spriteFile.Length == 796);
-        _ = Assert.ThrowsException<Exception>(() => pkg.GetAsset("Assets/doesnotexist.txt"));
+        _ = Assert.ThrowsException<KeyNotFoundException>(() => pkg.GetAsset("Assets/doesnotexist.txt"));
         _ = Assert.ThrowsException<FileNotFoundException>(() => new PackageReader("doesnotexist.pkg"));
     }
 }
